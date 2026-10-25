@@ -75,6 +75,14 @@ python run.py
 
 Health check: http://127.0.0.1:5000/api/health
 
+To diagnose Gemini API access independently from the UI, run this from the `backend` directory after setting `GEMINI_API_KEY` in `.env`:
+
+```powershell
+python check_gemini.py
+```
+
+The script sends one short test prompt, never prints the API key, and distinguishes provider HTTP errors from network timeouts.
+
 ### 2. Frontend
 
 Open a second terminal from the repository root:
