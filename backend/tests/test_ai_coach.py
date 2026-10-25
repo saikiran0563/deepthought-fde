@@ -61,11 +61,13 @@ def test_ai_coach_parses_successful_gemini_response(monkeypatch):
 
     def fake_urlopen(req, timeout):
         assert "gemini-3.8-flash:generateContent" in req.full_url
-        assert timeout == 25
+        assert timeout == 60
         sent = json.loads(req.data.decode("utf-8"))
         prompt = sent["contents"][0]["parts"][0]["text"]
         assert "Too expensive" in prompt
         assert "Current stage: Objection" in prompt
+        assert sent["generationConfig"]["thinkingConfig"]["thinkingLevel"] == "low"
+        assert "temperature" not in sent["generationConfig"]
         return FakeResponse({
             "candidates": [{
                 "content": {
