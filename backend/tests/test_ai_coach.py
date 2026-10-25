@@ -57,16 +57,18 @@ def test_ai_coach_rejects_non_text_context(monkeypatch):
 
 def test_ai_coach_parses_successful_gemini_response(monkeypatch):
     monkeypatch.setenv("GEMINI_API_KEY", "test-only-key")
-    monkeypatch.setenv("GEMINI_MODEL", "gemini-3.8-flash")
+    monkeypatch.setenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
     def fake_urlopen(req, timeout):
-        assert "gemini-3.8-flash:generateContent" in req.full_url
+        assert "gemini-3.5-flash-lite:generateContent" in req.full_url
+        assert "key=" not in req.full_url
+        assert req.get_header("X-goog-api-key") == "test-only-key"
         assert timeout == 60
         sent = json.loads(req.data.decode("utf-8"))
         prompt = sent["contents"][0]["parts"][0]["text"]
         assert "Too expensive" in prompt
         assert "Current stage: Objection" in prompt
-        assert sent["generationConfig"]["thinkingConfig"]["thinkingLevel"] == "low"
+        assert sent["generationConfig"]["thinkingConfig"]["thinkingLevel"] == "minimal"
         assert "temperature" not in sent["generationConfig"]
         return FakeResponse({
             "candidates": [{
