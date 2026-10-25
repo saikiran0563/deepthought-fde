@@ -1674,3 +1674,99 @@ textarea:focus, select:focus {
     line-height: 1.7;
   }
 }
+
+
+/* AI coaching panel */
+.ai-coach-panel {
+  margin: 3px 0 18px;
+  padding: 15px;
+  background: linear-gradient(145deg, #f7f6ff, #ffffff);
+  border: 1px solid #e7e5ff;
+  border-radius: 10px;
+}
+
+.ai-coach-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ai-coach-title .guidance-icon {
+  flex-shrink: 0;
+}
+
+.ai-coach-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.ai-coach-copy strong {
+  display: block;
+  color: #373354;
+  font: 800 11px "Manrope", sans-serif;
+}
+
+.ai-coach-copy p {
+  margin: 4px 0 0;
+  color: #83819d;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.button-coach {
+  width: 100%;
+  min-height: 38px;
+  margin-top: 13px;
+  color: #5d54ca;
+  background: #efeeff;
+  border-color: #dfdcff;
+}
+
+.button-coach:hover:not(:disabled) {
+  background: #e7e5ff;
+  border-color: #cfcaff;
+}
+
+.ai-coach-privacy {
+  margin: 8px 0 0;
+  color: #9c9ab0;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.ai-coach-error {
+  margin-top: 10px;
+  padding: 10px 11px;
+  color: #a13f50;
+  background: #fff2f3;
+  border: 1px solid #f5d9dd;
+  border-radius: 7px;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.ai-coach-response {
+  margin-top: 12px;
+  padding: 13px;
+  color: #4f526d;
+  background: #fff;
+  border: 1px solid #e9e7fa;
+  border-left: 3px solid #766de0;
+  border-radius: 8px;
+}
+
+.ai-coach-response strong {
+  display: block;
+  color: #6259ca;
+  font: 800 9px "Manrope", sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.ai-coach-response p {
+  margin: 8px 0 0;
+  color: #565d70;
+  font-size: 10px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
