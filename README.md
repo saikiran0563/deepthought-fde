@@ -64,7 +64,7 @@ Update the values in `backend/.env`:
 
 - `DATABASE_URL`: leave unset/empty to use local SQLite, or use your Supabase PostgreSQL session-pooler connection string (port 5432). Use the exact host and username shown by your Supabase project's Connect panel; URL-encode special characters in the password.
 - `GEMINI_API_KEY`: optional for the app to start, required to use AI coaching. Create a key in [Google AI Studio](https://aistudio.google.com/apikey).
-- `GEMINI_MODEL`: defaults to `gemini-3.8-flash`; change this if the model isn't enabled for your API key.
+- `GEMINI_MODEL`: defaults to `gemini-3.5-flash-lite` (a low-latency Flash-Lite model); change this if the model isn't enabled for your API key.
 - `CORS_ORIGINS`: for local development, use `http://127.0.0.1:5173,http://localhost:5173`.
 
 Start Flask:
