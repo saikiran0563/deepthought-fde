@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 from dotenv import load_dotenv
 from flask import Flask
@@ -45,8 +45,10 @@ def create_app(test_config=None):
 
     from app import models
     from app.routes import register_routes
+    from app.coach import register_coach_routes
 
     register_routes(app)
+    register_coach_routes(app)
 
     with app.app_context():
         db.create_all()
