@@ -65,7 +65,7 @@ def test_ai_coach_parses_successful_gemini_response(monkeypatch):
         sent = json.loads(req.data.decode("utf-8"))
         prompt = sent["contents"][0]["parts"][0]["text"]
         assert "Too expensive" in prompt
-        assert "Stage: Objection" in prompt
+        assert "Current stage: Objection" in prompt
         return FakeResponse({
             "candidates": [{
                 "content": {
