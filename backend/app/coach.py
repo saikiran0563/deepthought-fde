@@ -131,9 +131,31 @@ and recording the do-not-contact outcome. Keep the whole response under 150 word
             app.logger.warning("Gemini API returned HTTP %s", exc.code)
             return jsonify({"error": "The AI service request failed."}), 502
 
-        except (URLError, TimeoutError):
+        except URLError as exc:
+            # Log only the exception category: never log the request URL because it
+            # includes the API key in its query string.
+            reason = exc.reason
+            reason_type = type(reason).__name__
+            app.logger.warning(
+                "Gemini connection failed (reason_type=%s)", reason_type
+            )
+
+            if isinstance(reason, TimeoutError):
+                message = "The Gemini request timed out. Check your connection and try again."
+            elif isinstance(reason, OSError) and getattr(reason, "errno", None) in (-2, 11001, 11002):
+                message = "Could not resolve the Gemini API hostname. Check DNS or network settings."
+            else:
+                message = (
+                    f"Could not reach the Gemini API ({reason_type}). "
+                    "Check outbound HTTPS access, DNS, proxy, or TLS settings."
+                )
+
+            return jsonify({"error": message}), 502
+
+        except TimeoutError:
+            app.logger.warning("Gemini request timed out before a response was received")
             return jsonify({
-                "error": "Could not reach the AI service. Check your connection and try again."
+                "error": "The Gemini request timed out. Check your connection and try again."
             }), 502
 
         except (ValueError, KeyError, IndexError, TypeError):
