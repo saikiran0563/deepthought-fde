@@ -79,7 +79,7 @@ and recording the do-not-contact outcome. Keep the whole response under 150 word
             },
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {
-                "temperature": 0.4,
+                "thinkingConfig": {"thinkingLevel": "low"},
                 "maxOutputTokens": 300
             }
         }
@@ -92,7 +92,7 @@ and recording the do-not-contact outcome. Keep the whole response under 150 word
         )
 
         try:
-            with urlopen(req, timeout=25) as response:
+            with urlopen(req, timeout=60) as response:
                 result = json.loads(response.read().decode("utf-8"))
 
             candidates = result.get("candidates", [])
