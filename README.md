@@ -171,7 +171,15 @@ Redeploy after setting or changing the variable. Add the actual Vercel origin to
 - [x] Flask health endpoint and call-management API
 - [x] Optional Gemini coach endpoint
 - [x] GitHub Actions checks
-- [ ] Configure and verify hosted Render service
-- [ ] Configure and verify Vercel frontend
-- [ ] Test AI coaching using the deployed secret key
-- [ ] Record the required demo video and submit the hosted URLs
+- [x] Configure and verify hosted Render service — https://deepthought-fde-api.onrender.com
+- [x] Configure and verify Vercel frontend — https://deepthought-fde.vercel.app
+- [x] Test AI coaching using the deployed Gemini secret key
+- [ ] Record the required demo video (approximately 6 minutes) and submit the hosted URLs
+
+## Live deployment
+
+- Frontend: https://deepthought-fde.vercel.app
+- Backend health: https://deepthought-fde-api.onrender.com/api/health
+- Backend stages: https://deepthought-fde-api.onrender.com/api/stages
+
+The production frontend has been verified to connect to the Render API, and the deployed AI coach has successfully returned stage-specific coaching. The remaining submission task is to record and submit the demo video with the hosted URLs.
