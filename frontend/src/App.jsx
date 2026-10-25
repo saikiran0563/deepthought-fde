@@ -164,6 +164,9 @@ export default function App() {
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [coachLoading, setCoachLoading] = useState(false);
+  const [coaching, setCoaching] = useState("");
+  const [coachError, setCoachError] = useState("");
 
   const stageNumber = activeCall?.current_stage || 1;
   const currentStage = useMemo(
@@ -233,6 +236,8 @@ export default function App() {
       });
 
       setActiveCall(data.call);
+      setCoaching("");
+      setCoachError("");
       setProspectName("");
       setCompanyName("");
       setNotice("New call started. You're ready to go.");
@@ -270,10 +275,41 @@ export default function App() {
     }
   }
 
+  async function generateCoaching() {
+    if (!activeCall || !isCallOpen || coachLoading) return;
+
+    setCoachLoading(true);
+    setCoachError("");
+    setCoaching("");
+
+    try {
+      const data = await requestApi("/coach", {
+        method: "POST",
+        body: JSON.stringify({
+          stage_id: stageNumber,
+          prospect_words: activeCall.prospect_words || "",
+          notes: activeCall.notes || "",
+        }),
+      });
+      setCoaching(data.coaching || "");
+      if (!data.coaching) {
+        setCoachError("The AI service returned no coaching. Please try again.");
+      }
+    } catch (err) {
+      setCoachError(err.message || "Could not get AI coaching. Please try again.");
+    } finally {
+      setCoachLoading(false);
+    }
+  }
+
   async function changeStage(nextStage) {
     if (!isCallOpen || nextStage < 1 || nextStage > stages.length) return;
     if (nextStage === stageNumber) return;
-    await updateCall({ current_stage: nextStage }, `Stage ${nextStage} selected.`);
+    const updated = await updateCall({ current_stage: nextStage }, `Stage ${nextStage} selected.`);
+    if (updated) {
+      setCoaching("");
+      setCoachError("");
+    }
   }
 
   async function saveNotes() {
@@ -326,6 +362,8 @@ export default function App() {
     try {
       const data = await requestApi(`/calls/${call.id}`);
       setActiveCall(data.call);
+      setCoaching("");
+      setCoachError("");
     } catch (err) {
       setError(err.message);
     }
@@ -540,6 +578,34 @@ export default function App() {
                     <div className="guidance-row">
                       <div className="guidance-icon"><Sparkles size={17} /></div>
                       <div><strong>Keep in mind</strong><p>{currentStage?.guidance}</p></div>
+                    </div>
+
+                    <div className="ai-coach-panel">
+                      <div className="ai-coach-title">
+                        <div className="guidance-icon"><Sparkles size={17} /></div>
+                        <div className="ai-coach-copy">
+                          <strong>AI call coach</strong>
+                          <p>Get a contextual suggestion for this stage and what you've heard.</p>
+                        </div>
+                      </div>
+                      <button
+                        className="button button-coach"
+                        onClick={generateCoaching}
+                        disabled={!isCallOpen || coachLoading || saving}
+                      >
+                        {coachLoading ? <LoaderCircle size={16} className="spin" /> : <Sparkles size={16} />}
+                        {coachLoading ? "Thinking…" : "Get AI coaching"}
+                      </button>
+                      <p className="ai-coach-privacy">
+                        Your notes are sent to the configured AI provider for this request. Avoid sensitive or confidential information.
+                      </p>
+                      {coachError && <div className="ai-coach-error" role="alert">{coachError}</div>}
+                      {coaching && (
+                        <div className="ai-coach-response" aria-live="polite">
+                          <strong>Suggestions for {currentStage?.name}</strong>
+                          <p>{coaching}</p>
+                        </div>
+                      )}
                     </div>
 
                     <div className="stage-actions">
