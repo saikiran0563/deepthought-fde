@@ -1,7 +1,6 @@
 import json
 import os
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from flask import jsonify, request
@@ -37,7 +36,7 @@ def register_coach_routes(app):
                 "error": "AI coaching is not configured. Add GEMINI_API_KEY to the backend environment."
             }), 503
 
-        model = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+        model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
         prompt = f"""
 Help a sales representative during a live cold call.
@@ -65,7 +64,7 @@ and recording the do-not-contact outcome. Keep the whole response under 150 word
 
         endpoint = (
             "https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{model}:generateContent?{urlencode({'key': api_key})}"
+            f"{model}:generateContent"
         )
 
         payload = {
@@ -79,7 +78,7 @@ and recording the do-not-contact outcome. Keep the whole response under 150 word
             },
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {
-                "thinkingConfig": {"thinkingLevel": "low"},
+                "thinkingConfig": {"thinkingLevel": "minimal"},
                 "maxOutputTokens": 300
             }
         }
@@ -87,7 +86,10 @@ and recording the do-not-contact outcome. Keep the whole response under 150 word
         req = Request(
             endpoint,
             data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "x-goog-api-key": api_key,
+            },
             method="POST",
         )
 
