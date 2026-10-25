@@ -73,8 +73,12 @@ def main():
         return 1
 
     except URLError as exc:
-        print(f"NETWORK ERROR: {type(exc.reason).__name__}")
-        print("Could not complete the HTTPS request. Check the network, DNS, proxy, or TLS settings.")
+        if isinstance(exc.reason, TimeoutError):
+            print("TIMEOUT: No Gemini response arrived within 60 seconds.")
+            print("If this persists, use the TCP test below and check Google AI Studio's status page.")
+        else:
+            print(f"NETWORK ERROR: {type(exc.reason).__name__}")
+            print("Could not complete the HTTPS request. Check the network, DNS, proxy, or TLS settings.")
         return 1
 
     except TimeoutError:
