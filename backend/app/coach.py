@@ -1,4 +1,4 @@
-﻿import json
+import json
 import os
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
@@ -37,7 +37,7 @@ def register_coach_routes(app):
                 "error": "AI coaching is not configured. Add GEMINI_API_KEY to the backend environment."
             }), 503
 
-        model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        model = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
 
         prompt = f"""
 Help a sales representative during a live cold call.
