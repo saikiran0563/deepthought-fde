@@ -90,3 +90,20 @@ def test_ai_coach_parses_successful_gemini_response(monkeypatch):
     assert response.status_code == 200
     assert response.json["stage_name"] == "Objection"
     assert "budget concern" in response.json["coaching"]
+
+
+def test_ai_coach_reports_connection_failure_without_exposing_key(monkeypatch):
+    from urllib.error import URLError
+
+    monkeypatch.setenv("GEMINI_API_KEY", "test-secret-that-must-not-be-logged")
+
+    def fake_urlopen(req, timeout):
+        raise URLError("network unreachable")
+
+    monkeypatch.setattr("app.coach.urlopen", fake_urlopen)
+
+    response = make_client().post("/api/coach", json={"stage_id": 1})
+
+    assert response.status_code == 502
+    assert "str" in response.json["error"]
+    assert "test-secret-that-must-not-be-logged" not in response.get_data(as_text=True)
