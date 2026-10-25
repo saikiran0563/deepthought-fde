@@ -1,21 +1,22 @@
-﻿.venv/
-**/.venv/
-__pycache__/
-*.py[cod]
-*.db
-.env
-.env.*
-!.env.example
-.pytest_cache/
-frontend/node_modules/
-frontend/dist/
-.env
-.env.*
-!.env.example
-*.db
+# Python environments and bytecode
 .venv/
 **/.venv/
 __pycache__/
+*.py[cod]
 .pytest_cache/
+*.db
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# JavaScript dependencies and build output
 node_modules/
+frontend/node_modules/
 dist/
+frontend/dist/
+
+# Local editor / OS files
+.DS_Store
+Thumbs.db
