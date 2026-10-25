@@ -13,7 +13,7 @@ def create_app(test_config=None):
 
     app = Flask(__name__, instance_relative_config=True)
 
-    database_url = os.getenv("DATABASE_URL", "sqlite:///deepthought.db")
+    database_url = os.getenv("DATABASE_URL") or "sqlite:///deepthought.db"
 
     # Normalize PostgreSQL URLs for the psycopg 3 driver.
     if database_url.startswith("postgres://"):
