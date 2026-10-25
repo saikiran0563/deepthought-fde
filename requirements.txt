@@ -1,0 +1,3 @@
+# Render's current service is configured with the repository root as its working directory.
+# Keep dependencies sourced from the backend's pinned requirements.
+-r backend/requirements.txt
